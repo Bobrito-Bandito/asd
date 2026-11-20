@@ -45,7 +45,7 @@ func main(){
 	//  	slog.String("проверьте UUID", traderID.String()),)
 	// }
 
-	orderBook := storage.NewIndexedStorage[uuid.UUID, enum.Order](100)
+	orderBook := storage.NewIndexedStorage[uuid.UUID, enum.Order](10)
 
 	uuidOrder1 := uuid.NewV7()
 	uuidOrder2 := uuid.NewV7()

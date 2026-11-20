@@ -88,6 +88,23 @@ func (storage *IndexedStorage[K, V]) Put(key K, newValue V){
 	storage.data[key] = newValue
 }
 
+func (store *Store[K, V]) Update(key K, modif func(V) V, logger *slog.Logger) (V, bool) {
+	store.mutex.Lock()
+	defer store.mutex.Unlock()
+
+	value, ok := store.items[key]
+	if !ok {
+		var zero V
+		return zero, false
+	}
+	// var UpdatedValue enum.Order
+	UpdatedValue := modif(value)
+	enum.LogOrderState(convertToOrder(UpdatedValue), logger)
+
+	return UpdatedValue, true
+}
+
+
 func (storage *IndexedStorage[K, V]) Delete(key K) bool {
 	storage.mutex.Lock()
 	defer storage.mutex.Unlock()
